@@ -1,11 +1,60 @@
 const express = require('express')
 const router = express.Router()
 const { User } = require('../models/User')
+const config = require('../knexfile')[process.env.NODE_ENV || 'development']
+const knex = require('knex')(config);
+const bcrypt = require('bcrypt')
 
 router.get('/users', (_, res) => {
     User.query()
         .withGraphFetched('climbs')
-        .then(users => res.json(users))
+        .then(users => res.status(200).json(users))
+})
+
+router.get('/users/:id', (req, res) => {
+    User.query()
+    .where('id', req.params.id)
+    .first()
+    .then(user => res.status(200).json(user))
+})
+
+router.delete('/users/:id', (req, res) => {
+   User.query()
+   .where('id', req.params.id)
+   .delete()
+   .then(deletedUser => res.status(200).json(deletedUser))
+})
+
+
+router.post('/login', (req, res) => {
+    const { user } = req.body
+
+    User.query()
+    .findOne({ username: user.username || '' })
+    .then(existingUser => {
+        if (!existingUser){
+            res.status(401).json({ message: 'Invalid username of password' })
+        } else {
+            bcrypt.compare(user.password, existingUser.password_digest)
+            .then(isMatch => {
+                if (!isMatch) {
+                    response.stats(401).json({ message: 'Invalid username or password' })
+                }
+            })
+        }
+    })
+})
+
+
+router.post('/users', (req, res) => {
+    const { user } = req.body
+    saltRounds = 11
+    bcrypt.hash(user.password, saltRounds)
+        .then(hashedPassword => {
+            User.query()
+                .insert({ username: user.username, password_digest: hashedPassword })
+                .then(newUser => res.status(201).json(newUser))
+        })
 })
 
 module.exports = { userRouter: router }

@@ -7,6 +7,7 @@ exports.up = function(knex) {
       t.string('name')
       t.string('height')
       t.string('location')
+      
   })
 };
 

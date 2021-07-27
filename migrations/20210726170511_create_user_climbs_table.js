@@ -2,8 +2,8 @@
 exports.up = function(knex) {
   return knex.schema.createTable('user_climbs', t => {
       t.increments()
-      t.integer('user_id').references('id').inTable('users')
-      t.integer('climb_id').references('id').inTable('climbs')
+      t.integer('user_id').references('id').inTable('users').onDelete("CASCADE")
+      t.integer('climb_id').references('id').inTable('climbs').onDelete("CASCADE")
   })
 };
 
