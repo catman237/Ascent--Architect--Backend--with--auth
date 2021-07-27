@@ -1,9 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const router = express.Router()
 const { User } = require('../models/User')
 const config = require('../knexfile')[process.env.NODE_ENV || 'development']
 const knex = require('knex')(config);
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 router.get('/users', (_, res) => {
     User.query()
@@ -12,8 +14,9 @@ router.get('/users', (_, res) => {
 })
 
 router.get('/users/:id', (req, res) => {
+    const id = req.params.id
     User.query()
-    .where('id', req.params.id)
+    .where('id', id)
     .first()
     .then(user => res.status(200).json(user))
 })
@@ -21,6 +24,7 @@ router.get('/users/:id', (req, res) => {
 router.delete('/users/:id', (req, res) => {
    User.query()
    .where('id', req.params.id)
+   .withGraphFetched('climbs')
    .delete()
    .then(deletedUser => res.status(200).json(deletedUser))
 })
@@ -38,7 +42,12 @@ router.post('/login', (req, res) => {
             bcrypt.compare(user.password, existingUser.password_digest)
             .then(isMatch => {
                 if (!isMatch) {
-                    response.stats(401).json({ message: 'Invalid username or password' })
+                    res.status(401).json({ message: 'Invalid username or password' })
+                } else {
+                    const secret = process.env.AUTH_SECRET
+                    const payload = { user_id: existingUser.id }
+                    const token = jwt.sign(payload, secret)
+                    res.status(200).json({ token })
                 }
             })
         }
@@ -49,6 +58,7 @@ router.post('/login', (req, res) => {
 router.post('/users', (req, res) => {
     const { user } = req.body
     saltRounds = 11
+
     bcrypt.hash(user.password, saltRounds)
         .then(hashedPassword => {
             User.query()
