@@ -8,14 +8,12 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { authenticate } = require('./Auth')
 
-router.get('/users', (_, res) => {
+router.get('/users', authenticate,(_, res) => {
     User.query()
         .withGraphFetched('climbs')
         .then(users => res.status(200).json(users))
 })
 
-
-//protect this
 router.get('/users/:id', authenticate, (req, res) => {
         const id = req.params.id
         User.query()
@@ -24,7 +22,7 @@ router.get('/users/:id', authenticate, (req, res) => {
             .then(user => res.status(200).json(user))
     })
 
-router.delete('/users/:id', (req, res) => {
+router.delete('/users/:id', authenticate,(req, res) => {
     User.query()
         .where('id', req.params.id)
         .withGraphFetched('climbs')

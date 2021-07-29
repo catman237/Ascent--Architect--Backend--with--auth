@@ -1,20 +1,22 @@
+const { faRetweet } = require('@fortawesome/free-solid-svg-icons')
 const express = require('express')
 const router = express.Router()
 const { Climb } = require('../models/Climb')
+const { authenticate } = require('./Auth')
 
-router.get('/climbs', (_, res) => {
+router.get('/climbs', authenticate, (_, res) => {
     Climb.query()
         .then(climbs => res.json(climbs))
 })
 
-router.get('/climbs/:id', (req, res) => {
+router.get('/climbs/:id', authenticate ,(req, res) => {
     const id = req.params.id
     Climb.query()
     .where('id', id)
     .then(climb => res.json(climb))
 })
 
-router.post('/climbs', (req, res) => {
+router.post('/climbs', authenticate,(req, res) => {
     const climb = req.body
     Climb.query()
     .insert(climb)
@@ -22,7 +24,7 @@ router.post('/climbs', (req, res) => {
     .then(climb => res.send(climb))
 })
 
-router.delete('/climbs/:id', (req, res) => {
+router.delete('/climbs/:id', authenticate,(req, res) => {
     const id = req.params.id
     Climb.query()
     .where('id', id)
@@ -31,7 +33,7 @@ router.delete('/climbs/:id', (req, res) => {
 })
 
 
-router.patch('/climbs/:id', (req, res) => {
+router.patch('/climbs/:id', authenticate ,(req, res) => {
     const id = req.params.id
     const updatedClimb = req.body
     Climb.query()
