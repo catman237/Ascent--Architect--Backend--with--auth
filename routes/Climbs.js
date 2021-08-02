@@ -16,16 +16,15 @@ router.get('/climbs', authenticate,(_, res) => {``
         .then(climbs => res.json(climbs))
 })
 
-router.get('/climbs/:id',(req, res) => {
+router.get('/climbs/:id', authenticate,(req, res) => {
     const id = req.params.id
     Climb.query()
     .where('id', id)
     .then(climb => res.json(climb))
 })
 
-router.post('/climbs', (req, res) => {
+router.post('/climbs', authenticate, (req, res) => {
     const climb = req.body;
-    climb.user_id = req.user.id;
     Climb.query()
     .insert(climb)
     .returning('*')
