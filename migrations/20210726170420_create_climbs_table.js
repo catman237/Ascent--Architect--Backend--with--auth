@@ -10,7 +10,6 @@ exports.up = function(knex) {
       t.text('description')
       t.integer('sessions')
       t.boolean('sent')
-      
   })
 };
 

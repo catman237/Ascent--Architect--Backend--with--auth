@@ -8,14 +8,14 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { authenticate } = require('./Auth')
 
-router.get('/users', authenticate,(_, res) => {
+router.get('/users', (_, res) => {
     User.query()
-        .withGraphFetched('climbs')
         .then(users => res.status(200).json(users))
 })
 
 router.get('/users/:id', authenticate, (req, res) => {
         const id = req.params.id
+        console.log('USER', req.user)
         User.query()
             .where('id', id)
             .first()
@@ -31,19 +31,18 @@ router.delete('/users/:id', authenticate,(req, res) => {
 })
 
 
-router.post('/login', (req, res, next) => {
+router.post('/login', (req, res) => {
     const { user } = req.body
-
     User.query()
         .findOne({ username: user.username || '' })
         .then(existingUser => {
             if (!existingUser) {
-                res.status(401).json({ message: 'Invalid username of password' })
+                res.status(401).json({ message: 'Invalid username of password 1 ' })
             } else {
                 bcrypt.compare(user.password, existingUser.password_digest)
                     .then(isMatch => {
                         if (!isMatch) {
-                            res.status(401).json({ message: 'Invalid username or password' })
+                            res.status(401).json({ message: 'Invalid username or password 2' })
                         } else {
                             const secret = process.env.AUTH_SECRET
                             const payload = { user_id: existingUser.id }
