@@ -7,6 +7,17 @@ const { Climb } = require('./Climb')
 class User extends Model {
     static tableName = 'users' //static = class method of tableName users will never change for the class
 
+    static relationMappings = {
+        climbs: {
+            relation: Model.HasManyRelation,
+            modelClass: Climb,
+            join: {
+                from: 'climbs.id',
+                to: 'users.climb_id'
+            }
+        }
+    }
+
 }
 
 module.exports = { User }

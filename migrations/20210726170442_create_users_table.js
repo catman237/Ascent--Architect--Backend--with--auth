@@ -7,7 +7,7 @@ exports.up = function(knex) {
       t.string('name')
       t.string('height')
       t.string('location')
-      
+      t.integer('climb_id').references('id').inTable('climbs')
   })
 };
 

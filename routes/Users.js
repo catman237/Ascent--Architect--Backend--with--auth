@@ -14,6 +14,7 @@ router.get('/logout', authenticate, (_, res) => {
 
 router.get('/users', (_, res) => {
     User.query()
+        .withGraphFetched('climbs')
         .then(users => res.status(200).json(users))
 })
 
