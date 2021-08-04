@@ -26,7 +26,7 @@ router.get('/climbs/:id', authenticate,(req, res) => {
 router.post('/climbs', authenticate, (req, res) => {
     const climb = req.body;
     Climb.query()
-    .insert(climb)
+    .insert({ ...climb, user_id: req.user.id })
     .returning('*')
     .then(climb => res.send(climb))
 })
@@ -36,6 +36,7 @@ router.delete('/climbs/:id', authenticate,(req, res) => {
     Climb.query()
     .where('id', id)
     .delete()
+    .returning('*')
     .then(deletedClimb => res.json(deletedClimb))
 })
 
@@ -47,7 +48,8 @@ router.patch('/climbs/:id', authenticate,(req, res) => {
     Climb.query()
     .where('id', id)
     .update(updatedClimb)
-    .then(updatedClimb => res.status(200).json(updatedClimb))
+    .returning('*')
+    .then(updatedClimb => res.status(200).json(updatedClimb[0]))
 })
 
 module.exports = { climbRouter: router }

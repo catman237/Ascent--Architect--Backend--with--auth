@@ -12,7 +12,9 @@ exports.seed = function(knex) {
         terrain: 'steep', 
         description: 'this is a short sport climb', 
         sessions: 0, 
-        sent: false},
+        sent: false,
+        user_id: 1
+        },
         
         {name: 'climb', 
         grade: '5.13', 
@@ -21,7 +23,9 @@ exports.seed = function(knex) {
         terrain: 'steep', 
         description: 'this is a sport climb', 
         sessions: 0, 
-        sent: false},
+        sent: false,
+        user_id: 1
+        },
 
         {name: 'climb', 
         grade: '5.14', 
@@ -30,7 +34,9 @@ exports.seed = function(knex) {
         terrain: 'steep', 
         description: 'this is a hard sport climb', 
         sessions: 0, 
-        sent: false}
+        sent: false,
+        user_id: 2
+      }
       ]);
     });
 };

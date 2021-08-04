@@ -18,18 +18,19 @@ router.get('/users', (_, res) => {
         .then(users => res.status(200).json(users))
 })
 
-// router.delete('/users', (req, res) => {
-//     User.query()
-//     .delete()
-//     .then(deletedUser => res.status(200).json(deletedUser))
-// })
-
 router.get('/users/:id', (req, res) => {
     const id = req.params.id
-    console.log('USER', req.user)
     User.query()
-        .where('id', id)
+        .where('id', id) //switch this
         .first()
+        .then(user => res.status(200).json(user))
+})
+
+router.get('/profile', authenticate, (req, res) => {
+    const id = req.user.id
+    User.query()
+        .findById(id)
+        .withGraphFetched('climbs')
         .then(user => res.status(200).json(user))
 })
 
@@ -45,6 +46,7 @@ router.post('/login', (req, res) => {
     const { user } = req.body
     User.query()
         .findOne({ username: user.username || '' })
+        .withGraphFetched('climbs')
         .then(existingUser => {
             if (!existingUser) {
                 res.status(401).json({ message: 'Invalid username of password 1 ' })
@@ -57,7 +59,7 @@ router.post('/login', (req, res) => {
                             const secret = process.env.AUTH_SECRET
                             const payload = { user_id: existingUser.id }
                             const token = jwt.sign(payload, secret)
-                            res.status(200).json({ token })
+                            res.status(200).json({ token, user: existingUser })
                         }
                     })
             }

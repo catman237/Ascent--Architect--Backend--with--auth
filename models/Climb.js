@@ -4,6 +4,8 @@ Model.knex(database) //this is how to connect the database to the objection mode
 
 class Climb extends Model {
     static tableName = 'climbs'
+    
+
 }
 
 module.exports =  { Climb }

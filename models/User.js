@@ -12,12 +12,11 @@ class User extends Model {
             relation: Model.HasManyRelation,
             modelClass: Climb,
             join: {
-                from: 'climbs.id',
-                to: 'users.climb_id'
+                from: 'users.id',
+                to: 'climbs.user_id'
             }
         }
     }
-
 }
 
 module.exports = { User }
