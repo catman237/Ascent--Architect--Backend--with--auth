@@ -37,7 +37,7 @@ router.delete('/climbs/:id', authenticate,(req, res) => {
     .where('id', id)
     .delete()
     .returning('*')
-    .then(deletedClimb => res.json(deletedClimb))
+    .then(deletedClimb => res.json(deletedClimb[0]))
 })
 
 
