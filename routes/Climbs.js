@@ -12,7 +12,7 @@ const { authenticate } = require('./Auth')
 
 router.get('/climbs', authenticate,(_, res) => {``
     Climb.query()
-        .orderBy('id', 'desc')
+        // .orderBy('id', 'desc')
         .then(climbs => res.json(climbs))
 })
 
