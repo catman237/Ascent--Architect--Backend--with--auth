@@ -1,4 +1,4 @@
- # Ascent--Architec--Backend
+ # Ascent--Architect--Backend
 
 This project was built for Rock Climbers to help make the sport more trackable. 
 
