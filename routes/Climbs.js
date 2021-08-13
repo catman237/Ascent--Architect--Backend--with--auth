@@ -4,12 +4,6 @@ const router = express.Router()
 const { Climb } = require('../models/Climb')
 const { authenticate } = require('./Auth')
 
-// router.use('*', (req, res, next) => {
-//     console.log('url', req.url)
-//     console.log(req.headers)
-//     next();
-// })
-
 router.get('/climbs', authenticate,(_, res) => {``
     Climb.query()
         // .orderBy('id', 'desc')
