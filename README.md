@@ -1,4 +1,4 @@
-Ascent_Architect Backend
+Ascent Architect Backend
 
 This project was built for Rock Climbers to help make the sport more trackable. 
 The Backend was built with Node.js and the Express framework as middleware.
